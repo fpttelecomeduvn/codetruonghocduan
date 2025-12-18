@@ -1,0 +1,43 @@
+.subject-list-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.subject-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subject-table thead {
+  background: linear-gradient(135deg, #9f7aea 0%, #6b21a8 100%);
+  color: white;
+}
+
+.subject-table th, .subject-table td {
+  padding: 14px;
+  text-align: left;
+}
+
+.subject-code {
+  background: rgba(159,122,234,0.1);
+  color: #6b21a8;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 36px;
+  color: #888;
+}
+
+.action-buttons { display:flex; gap:8px; }
+
+.btn-sm { padding:6px 10px !important; }
+
+@media (max-width: 768px) {
+  .subject-table { min-width: 800px; }
+}

@@ -6,6 +6,7 @@ interface StudentListProps {
   onView: (student: Student) => void;
   onEdit: (student: Student) => void;
   onDelete: (student: Student) => void;
+  onChangeStatus?: (student: Student, newStatus: string) => void;
 }
 
 export const StudentList = ({
@@ -13,7 +14,18 @@ export const StudentList = ({
   onView,
   onEdit,
   onDelete,
+  onChangeStatus,
 }: StudentListProps) => {
+  const getStatusBgColor = (status: string) => {
+    const colors: { [key: string]: string } = {
+      active: '#d4edda',
+      graduated: '#cce5ff',
+      dropped_out: '#f8d7da',
+      suspended: '#fff3cd',
+      completed: '#d1ecf1',
+    };
+    return colors[status] || '#f0f0f0';
+  };
   return (
     <div className="student-list-container">
       <table className="student-table">
@@ -27,13 +39,14 @@ export const StudentList = ({
             <th>Chuyên ngành</th>
             <th>GPA</th>
             <th>Ngày nhập học</th>
+            <th>Trạng thái</th>
             <th>Thao tác</th>
           </tr>
         </thead>
         <tbody>
           {students.length === 0 ? (
             <tr>
-              <td colSpan={9} className="empty-message">
+              <td colSpan={10} className="empty-message">
                 Chưa có sinh viên nào
               </td>
             </tr>
@@ -52,6 +65,30 @@ export const StudentList = ({
                   </span>
                 </td>
                 <td>{new Date(student.enrollmentDate).toLocaleDateString('vi-VN')}</td>
+                <td>
+                  <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                    <select
+                      value={student.status}
+                      onChange={(e) => onChangeStatus?.(student, e.target.value)}
+                      style={{
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        border: 'none',
+                        backgroundColor: getStatusBgColor(student.status),
+                        cursor: 'pointer',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                      }}
+                      title="Nhấp để thay đổi trạng thái"
+                    >
+                      <option value="active">🟢 Đang học</option>
+                      <option value="graduated">🎓 Tốt nghiệp</option>
+                      <option value="dropped_out">❌ Bỏ học</option>
+                      <option value="suspended">⏸️ Tạm dừng</option>
+                      <option value="completed">✅ Hoàn thành</option>
+                    </select>
+                  </div>
+                </td>
                 <td className="action-buttons">
                   <button
                     className="btn btn-sm btn-info"

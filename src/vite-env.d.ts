@@ -1,8 +1,1 @@
-/// <reference types="vite/client" />import { StrictMode } from 'react'
-
-
-const App = () => {
-  return <StrictMode></StrictMode>
-}
-
-export default App
+/// <reference types="vite/client" />

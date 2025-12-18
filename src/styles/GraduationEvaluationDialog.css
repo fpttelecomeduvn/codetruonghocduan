@@ -1,0 +1,96 @@
+.grad-eval-dialog {
+  width: 90%;
+  max-width: 700px;
+}
+
+.grad-eval-dialog h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+}
+
+.grad-eval-dialog .form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.grad-eval-dialog .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.grad-eval-dialog label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #34495e;
+  font-size: 0.9rem;
+}
+
+.grad-eval-dialog input,
+.grad-eval-dialog textarea,
+.grad-eval-dialog select {
+  padding: 8px 10px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.grad-eval-dialog input:focus,
+.grad-eval-dialog textarea:focus,
+.grad-eval-dialog select:focus {
+  outline: none;
+  border-color: #9b59b6;
+  box-shadow: 0 0 4px rgba(155, 89, 182, 0.3);
+}
+
+.grad-eval-dialog input:disabled,
+.grad-eval-dialog textarea:disabled,
+.grad-eval-dialog select:disabled {
+  background-color: #ecf0f1;
+  cursor: not-allowed;
+}
+
+.grad-eval-dialog textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.grad-eval-dialog .dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #ecf0f1;
+}
+
+.grad-eval-dialog .btn {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.grad-eval-dialog .btn-primary {
+  background-color: #9b59b6;
+  color: white;
+}
+
+.grad-eval-dialog .btn-primary:hover {
+  background-color: #8e44ad;
+  box-shadow: 0 2px 6px rgba(155, 89, 182, 0.3);
+}
+
+.grad-eval-dialog .btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.grad-eval-dialog .btn-secondary:hover {
+  background-color: #7f8c8d;
+}

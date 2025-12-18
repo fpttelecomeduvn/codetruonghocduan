@@ -25,6 +25,7 @@ export const StudentDialog = ({
     major: '',
     gpa: 0,
     enrollmentDate: '',
+    status: 'active',
   });
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export const StudentDialog = ({
         major: '',
         gpa: 0,
         enrollmentDate: '',
+        status: 'active',
       });
     }
   }, [student, isOpen]);
@@ -172,17 +174,36 @@ export const StudentDialog = ({
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="enrollmentDate">Ngày nhập học *</label>
-            <input
-              id="enrollmentDate"
-              type="date"
-              name="enrollmentDate"
-              value={formData.enrollmentDate}
-              onChange={handleChange}
-              disabled={isViewMode}
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="enrollmentDate">Ngày nhập học *</label>
+              <input
+                id="enrollmentDate"
+                type="date"
+                name="enrollmentDate"
+                value={formData.enrollmentDate}
+                onChange={handleChange}
+                disabled={isViewMode}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="status">Trạng thái *</label>
+              <select
+                id="status"
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                disabled={isViewMode}
+                required
+              >
+                <option value="active">Đang học</option>
+                <option value="graduated">Tốt nghiệp</option>
+                <option value="dropped_out">Bỏ học</option>
+                <option value="suspended">Tạm dừng</option>
+                <option value="completed">Hoàn thành</option>
+              </select>
+            </div>
           </div>
 
           <div className="dialog-footer">

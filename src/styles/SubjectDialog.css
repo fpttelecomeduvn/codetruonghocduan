@@ -1,0 +1,10 @@
+.dialog-overlay { position:fixed; inset:0; background: rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:1000; }
+.dialog-content { background:white; border-radius:12px; max-width:680px; width:90%; box-shadow:0 10px 40px rgba(0,0,0,0.12); }
+.dialog-header { padding:20px 24px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
+.form-group { margin-bottom:16px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.form-group input, .form-group select, textarea { width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; }
+.dialog-footer { display:flex; justify-content:flex-end; gap:12px; padding:16px 24px; border-top:1px solid #eee; }
+.btn-primary { background: linear-gradient(135deg,#9f7aea 0%,#6b21a8 100%); color:white; }
+.btn-secondary { background:#e0e0e0; }
+@media (max-width:600px){ .form-row{grid-template-columns:1fr;} }

@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { supabase } from '../services/supabaseClient';
 
 export interface Teacher {
   id: string;
@@ -12,62 +13,132 @@ export interface Teacher {
   hireDate: string;
 }
 
-const INITIAL_TEACHERS: Teacher[] = [
-  {
-    id: '1',
-    name: 'Trần Minh Tuấn',
-    email: 'tranminhtuan@email.com',
-    phone: '0912111111',
-    address: '100 Đường Pasteur, Quận 1, TP. Hồ Chí Minh',
-    department: 'Khoa Công Nghệ Thông Tin',
-    specialization: 'Lập trình Web',
-    yearsOfExperience: 8,
-    hireDate: '2016-08-15',
-  },
-  {
-    id: '2',
-    name: 'Lê Thị Hương',
-    email: 'lethihuong@email.com',
-    phone: '0987222222',
-    address: '200 Đường Nguyễn Hữu Cảnh, Quận 1, TP. Hồ Chí Minh',
-    department: 'Khoa Công Nghệ Thông Tin',
-    specialization: 'Cơ sở dữ liệu',
-    yearsOfExperience: 6,
-    hireDate: '2018-09-01',
-  },
-  {
-    id: '3',
-    name: 'Phạm Văn Sơn',
-    email: 'phamvanson@email.com',
-    phone: '0909333333',
-    address: '300 Đường Võ Văn Kiệt, Quận 5, TP. Hồ Chí Minh',
-    department: 'Khoa Công Nghệ Thông Tin',
-    specialization: 'Hệ thống máy tính',
-    yearsOfExperience: 10,
-    hireDate: '2014-07-20',
-  },
-];
-
 export const useTeachers = () => {
-  const [teachers, setTeachers] = useState<Teacher[]>(INITIAL_TEACHERS);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const addTeacher = useCallback((teacher: Omit<Teacher, 'id'>) => {
-    const newTeacher: Teacher = {
-      ...teacher,
-      id: Date.now().toString(),
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        setLoading(true);
+        const { data, error: fetchError } = await supabase
+          .from('teachers')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (fetchError) throw fetchError;
+
+        const mappedTeachers: Teacher[] = (data || []).map((row: any) => ({
+          id: row.id,
+          name: row.name,
+          email: row.email,
+          phone: row.phone,
+          address: row.address || '',
+          department: row.department || '',
+          specialization: row.specialty || '',
+          yearsOfExperience: row.experience_years || 0,
+          hireDate: row.created_at || new Date().toISOString().split('T')[0],
+        }));
+
+        setTeachers(mappedTeachers);
+        setError(null);
+      } catch (err: any) {
+        console.error('Error fetching teachers:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
-    setTeachers((prev) => [...prev, newTeacher]);
-    return newTeacher;
+
+    fetchTeachers();
   }, []);
 
-  const updateTeacher = useCallback((id: string, teacher: Omit<Teacher, 'id'>) => {
-    setTeachers((prev) =>
-      prev.map((t) => (t.id === id ? { ...teacher, id } : t))
-    );
+  const addTeacher = useCallback(async (teacher: Omit<Teacher, 'id'>) => {
+    try {
+      const { data, error: insertError } = await supabase
+        .from('teachers')
+        .insert([
+          {
+            name: teacher.name,
+            email: teacher.email,
+            phone: teacher.phone,
+            department: teacher.department,
+            specialty: teacher.specialization,
+            experience_years: teacher.yearsOfExperience,
+          },
+        ])
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+
+      const newTeacher: Teacher = {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        address: data.address || '',
+        department: data.department || '',
+        specialization: data.specialty || '',
+        yearsOfExperience: data.experience_years || 0,
+        hireDate: data.created_at,
+      };
+
+      setTeachers((prev) => [newTeacher, ...prev]);
+      return newTeacher;
+    } catch (err: any) {
+      console.error('Error adding teacher:', err);
+      setError(err.message);
+      throw err;
+    }
   }, []);
 
-  const deleteTeacher = useCallback((id: string) => {
-    setTeachers((prev) => prev.filter((t) => t.id !== id));
+  const updateTeacher = useCallback(async (id: string, teacher: Omit<Teacher, 'id'>) => {
+    try {
+      const { error: updateError } = await supabase
+        .from('teachers')
+        .update({
+          name: teacher.name,
+          email: teacher.email,
+          phone: teacher.phone,
+          department: teacher.department,
+          specialty: teacher.specialization,
+          experience_years: teacher.yearsOfExperience,
+        })
+        .eq('id', id);
+
+      if (updateError) throw updateError;
+
+      setTeachers((prev) =>
+        prev.map((t) =>
+          t.id === id
+            ? {
+                ...teacher,
+                id: t.id,
+              }
+            : t
+        )
+      );
+    } catch (err: any) {
+      console.error('Error updating teacher:', err);
+      setError(err.message);
+      throw err;
+    }
+  }, []);
+
+  const deleteTeacher = useCallback(async (id: string) => {
+    try {
+      const { error: deleteError } = await supabase.from('teachers').delete().eq('id', id);
+
+      if (deleteError) throw deleteError;
+
+      setTeachers((prev) => prev.filter((t) => t.id !== id));
+    } catch (err: any) {
+      console.error('Error deleting teacher:', err);
+      setError(err.message);
+      throw err;
+    }
   }, []);
 
   const getTeacher = useCallback(
@@ -83,5 +154,7 @@ export const useTeachers = () => {
     updateTeacher,
     deleteTeacher,
     getTeacher,
+    loading,
+    error,
   };
 };
