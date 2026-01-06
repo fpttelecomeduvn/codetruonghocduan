@@ -15,6 +15,7 @@ export interface ActivityLog {
   resource_name?: string;
   description: string;
   ip_address?: string;
+  location?: string;
   user_agent?: string;
   status: 'success' | 'failed';
   error_message?: string;
