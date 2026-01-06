@@ -17,6 +17,8 @@ export interface SimpleActivityLog {
   description: string;
   status: 'success' | 'failed';
   error_message?: string;
+  metadata?: Record<string, any> | null;
+  duration_ms?: number;
   timestamp: string;
   created_at?: string;
 }
@@ -39,6 +41,7 @@ export const simpleLogActivityService = {
     description: string;
     status?: 'success' | 'failed';
     errorMessage?: string;
+    metadata?: Record<string, any>;
   }): Promise<{ error: any; data: any }> {
     try {
       const { error, data: logData } = await supabase
@@ -55,6 +58,7 @@ export const simpleLogActivityService = {
             description: data.description,
             status: data.status || 'success',
             error_message: data.errorMessage,
+            metadata: data.metadata || null,
             timestamp: new Date().toISOString(),
           },
         ]);
@@ -128,7 +132,7 @@ export const simpleLogActivityService = {
     status?: string;
   }): Promise<{ count: number; error: any }> {
     try {
-      let query = supabase.from('activity_logs').delete();
+      let query = supabase.from('activity_logs').delete({ count: 'exact' });
 
       if (filters?.startDate) {
         query = query.gte('timestamp', filters.startDate);
@@ -297,7 +301,8 @@ export const simpleLogAction = async (
   actionType: SimpleActivityLog['action_type'],
   description: string,
   resourceType?: string,
-  resourceName?: string
+  resourceName?: string,
+  metadata?: Record<string, any>
 ): Promise<void> => {
   try {
     await simpleLogActivityService.logActivity({
@@ -308,6 +313,7 @@ export const simpleLogAction = async (
       resourceType,
       resourceName,
       description,
+      metadata,
     });
   } catch (error) {
     console.warn('Failed to log action:', error);

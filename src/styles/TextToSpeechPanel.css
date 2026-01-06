@@ -157,6 +157,12 @@
   background: #bdc3c7;
 }
 
+.tts-speed-hint {
+  font-size: 12px;
+  color: #7f8c8d;
+  margin-top: 6px;
+}
+
 .tts-error {
   background: #fadbd8;
   color: #c0392b;

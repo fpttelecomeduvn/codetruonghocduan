@@ -13,12 +13,20 @@ export const TextToSpeechPanel: React.FC<TextToSpeechPanelProps> = ({
 }) => {
   const [text, setText] = useState(defaultText);
   const [voice, setVoice] = useState<VoiceType>('banmai_north');
-  const [speed, setSpeed] = useState(1.0);
+  const [speed, setSpeed] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
+      }
+    };
+  }, [audioUrl]);
 
   useEffect(() => {
     if (defaultText) {
@@ -127,26 +135,27 @@ export const TextToSpeechPanel: React.FC<TextToSpeechPanelProps> = ({
               onChange={(e) => setVoice(e.target.value as VoiceType)}
               disabled={loading}
             >
-              {Object.entries(VOICE_OPTIONS).map(([key, label]) => (
+              {Object.entries(VOICE_OPTIONS).map(([key, option]) => (
                 <option key={key} value={key}>
-                  {label}
+                  {option.label}
                 </option>
               ))}
             </select>
           </div>
 
           <div className="tts-section">
-            <label>Tốc độ: {speed.toFixed(1)}x</label>
+            <label>Tốc độ đọc: {speed >= 0 ? `+${speed}` : speed}</label>
             <input
               type="range"
               className="tts-slider"
-              min="0.5"
-              max="2.0"
-              step="0.1"
+              min="-3"
+              max="3"
+              step="1"
               value={speed}
-              onChange={(e) => setSpeed(parseFloat(e.target.value))}
+              onChange={(e) => setSpeed(parseInt(e.target.value, 10))}
               disabled={loading}
             />
+            <div className="tts-speed-hint">-3 chậm • 0 mặc định • +3 nhanh</div>
           </div>
         </div>
 

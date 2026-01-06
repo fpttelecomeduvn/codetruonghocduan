@@ -1,4 +1,4 @@
-import { logActivityService } from './logService';
+import { simpleLogActivityService } from './logService_simple';
 
 /**
  * Utility wrapper để tự động ghi logs cho các hành động
@@ -31,7 +31,7 @@ export const logCrudAction = async (
 
     // Log success
     const endTime = performance.now();
-    await logActivityService.logActivity({
+    await simpleLogActivityService.logActivity({
       userId: config.userId,
       username: config.username,
       userRole: config.userRole,
@@ -50,7 +50,7 @@ export const logCrudAction = async (
     return { success: true, data: result };
   } catch (error: any) {
     // Log error
-    await logActivityService.logActivity({
+    await simpleLogActivityService.logActivity({
       userId: config.userId,
       username: config.username,
       userRole: config.userRole,
@@ -197,7 +197,7 @@ export const logImport = (
  */
 export const logAction = async (config: LogActionConfig): Promise<void> => {
   try {
-    await logActivityService.logActivity(config);
+    await simpleLogActivityService.logActivity(config);
   } catch (error) {
     console.error('Failed to log action:', error);
   }
