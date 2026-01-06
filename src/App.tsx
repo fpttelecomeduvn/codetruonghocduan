@@ -24,6 +24,7 @@ import { ConfirmDialog } from './components/ConfirmDialog'
 import { LoginPage } from './components/LoginPage'
 import { AdminPanel } from './components/AdminPanel'
 import AuditLogsPage from './components/AuditLogsPage'
+import TextToSpeechPanel from './components/TextToSpeechPanel'
 import './App.css'
 
 function App() {
@@ -51,7 +52,7 @@ function App() {
   const { evaluations: gradEvaluations, addEvaluation: addGradEvaluation, updateEvaluation: updateGradEvaluation, deleteEvaluation: deleteGradEvaluation, getEvaluation: getGradEvaluation } = useGraduationEvaluations()
   const { promotionResults } = usePromotionResults(evaluations, gradEvaluations)
 
-  const [currentTab, setCurrentTab] = useState<'students' | 'teachers' | 'classes' | 'subjects' | 'teacher-eval' | 'graduation-eval' | 'promotion-result' | 'audit-logs'>('students')
+  const [currentTab, setCurrentTab] = useState<'students' | 'teachers' | 'classes' | 'subjects' | 'teacher-eval' | 'graduation-eval' | 'promotion-result' | 'audit-logs' | 'text-to-speech'>('students')
   const [dialogMode, setDialogMode] = useState<'create' | 'view' | 'edit' | null>(null)
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null)
@@ -338,6 +339,12 @@ function App() {
           >
             📊 Xét Lên Lớp
           </button>
+          <button
+            className={`nav-btn ${currentTab === 'text-to-speech' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('text-to-speech')}
+          >
+            🎤 Text to Speech
+          </button>
           {currentUser?.role === 'admin' || currentUser?.role === 'administrator' ? (
             <button
               className={`nav-btn ${currentTab === 'audit-logs' ? 'active' : ''}`}
@@ -477,6 +484,8 @@ function App() {
 
             <PromotionResultList results={promotionResults} />
           </>
+        ) : currentTab === 'text-to-speech' ? (
+          <TextToSpeechPanel />
         ) : currentTab === 'audit-logs' ? (
           <AuditLogsPage currentUser={currentUser} />
         ) : (
