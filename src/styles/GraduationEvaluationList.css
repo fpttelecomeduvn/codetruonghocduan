@@ -13,7 +13,7 @@
 }
 
 .grad-eval-table thead {
-  background-color: #8e44ad;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   position: sticky;
   top: 0;
@@ -23,7 +23,7 @@
   padding: 12px 10px;
   text-align: left;
   font-weight: 600;
-  border-bottom: 2px solid #7d3c98;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.3);
 }
 
 .grad-eval-table td {
@@ -36,11 +36,11 @@
 }
 
 .grad-eval-table tbody tr:hover {
-  background-color: #faf5ff;
+  background-color: #f8f9ff;
 }
 
 .grad-eval-table tbody tr:nth-child(even) {
-  background-color: #faf5ff;
+  background-color: #f8f9ff;
 }
 
 .grad-eval-table .empty-message {

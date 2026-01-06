@@ -314,6 +314,12 @@ function App() {
             🏫 Quản Lý Lớp Học
           </button>
           <button
+            className={`nav-btn ${currentTab === 'subjects' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('subjects')}
+          >
+            📚 Quản Lý Môn Học
+          </button>
+          <button
             className={`nav-btn ${currentTab === 'teacher-eval' ? 'active' : ''}`}
             onClick={() => setCurrentTab('teacher-eval')}
           >

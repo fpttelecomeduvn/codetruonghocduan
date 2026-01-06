@@ -1,0 +1,643 @@
+/* ============================================
+   ACTIVITY LOGS PANEL - MAIN STYLES
+   ============================================ */
+
+.activity-logs-panel {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.alp-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.alp-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.alp-header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+
+.alp-tabs {
+  display: flex;
+  border-bottom: 2px solid #e5e7eb;
+  background: #f9fafb;
+  padding: 0;
+  margin: 0;
+}
+
+.alp-tab {
+  flex: 1;
+  padding: 16px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+
+.alp-tab:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.alp-tab.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+  background: white;
+}
+
+/* ============================================
+   TAB CONTENT
+   ============================================ */
+
+.alp-tab-content {
+  padding: 24px;
+}
+
+/* ============================================
+   FILTERS
+   ============================================ */
+
+.alp-filters {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.alp-filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.alp-filter-group {
+  flex: 1;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.alp-filter-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.alp-select,
+.alp-input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  background: white;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.alp-select:hover,
+.alp-input:hover {
+  border-color: #9ca3af;
+}
+
+.alp-select:focus,
+.alp-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.alp-btn-clear {
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.alp-btn-clear:hover {
+  background: #dc2626;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+
+/* ============================================
+   TABLE STYLES
+   ============================================ */
+
+.alp-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.alp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.alp-table thead {
+  background: #f3f4f6;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.alp-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.alp-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease;
+}
+
+.alp-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.alp-table td {
+  padding: 12px 16px;
+  color: #374151;
+}
+
+.alp-log-row {
+  cursor: pointer;
+}
+
+.alp-expanded-row {
+  background: #f9fafb;
+}
+
+.alp-expanded-row td {
+  padding: 0;
+}
+
+/* ============================================
+   BADGES & LABELS
+   ============================================ */
+
+.alp-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.alp-badge-success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.alp-badge-info {
+  background: #dbeafe;
+  color: #0c4a6e;
+}
+
+.alp-badge-primary {
+  background: #ddd6fe;
+  color: #4c1d95;
+}
+
+.alp-badge-danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.alp-badge-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.alp-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.alp-status-success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.alp-status-failed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.alp-status-active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.alp-status-logged_out {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.alp-status-session_expired {
+  background: #fef08a;
+  color: #854d0e;
+}
+
+.alp-role {
+  display: block;
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.alp-resource-name {
+  display: block;
+  font-size: 12px;
+  color: #667eea;
+  margin-top: 2px;
+}
+
+.alp-ip {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #1f2937;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* ============================================
+   EXPANDED ROW
+   ============================================ */
+
+.alp-expanded-content {
+  padding: 20px 16px;
+}
+
+.alp-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.alp-detail-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.alp-detail-item strong {
+  display: block;
+  font-size: 12px;
+  color: #374151;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.alp-detail-item p,
+.alp-detail-item code,
+.alp-detail-item pre {
+  margin: 0;
+  font-size: 12px;
+  color: #1f2937;
+  word-break: break-word;
+}
+
+.alp-detail-item code {
+  background: #f3f4f6;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.alp-detail-item pre {
+  background: #f3f4f6;
+  padding: 8px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.alp-detail-item.alp-error {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.alp-detail-item.alp-error strong {
+  color: #dc2626;
+}
+
+/* ============================================
+   EXPAND BUTTON
+   ============================================ */
+
+.alp-btn-expand {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #667eea;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.alp-btn-expand:hover {
+  background: #f3f4f6;
+  color: #764ba2;
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+
+.alp-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  border-radius: 0 0 8px 8px;
+}
+
+.alp-pagination-info {
+  font-size: 13px;
+  color: #6b7280;
+  min-width: 200px;
+  text-align: center;
+}
+
+.alp-btn-pagination {
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.alp-btn-pagination:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.alp-btn-pagination:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   STATISTICS
+   ============================================ */
+
+.alp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.alp-stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  transition: all 0.3s ease;
+}
+
+.alp-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.alp-stat-card.alp-stat-error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.alp-stat-card.alp-stat-error:hover {
+  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+}
+
+.alp-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.alp-stat-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ============================================
+   LOADING & EMPTY STATES
+   ============================================ */
+
+.alp-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 14px;
+  animation: spin 1s linear infinite;
+}
+
+.alp-loading::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.alp-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.alp-empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.alp-error {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 16px;
+  color: #dc2626;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .alp-filter-row {
+    flex-direction: column;
+  }
+
+  .alp-filter-group {
+    width: 100%;
+  }
+
+  .alp-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .alp-header {
+    padding: 16px;
+  }
+
+  .alp-header h2 {
+    font-size: 20px;
+  }
+
+  .alp-tab-content {
+    padding: 16px;
+  }
+
+  .alp-tabs {
+    overflow-x: auto;
+  }
+
+  .alp-table {
+    font-size: 12px;
+  }
+
+  .alp-table th,
+  .alp-table td {
+    padding: 8px 12px;
+  }
+
+  .alp-pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .alp-pagination-info {
+    width: 100%;
+  }
+
+  .alp-btn-pagination {
+    width: 100%;
+  }
+
+  .alp-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alp-stat-value {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .alp-filter-row {
+    gap: 8px;
+  }
+
+  .alp-table-wrapper {
+    overflow-x: scroll;
+  }
+
+  .alp-table {
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .alp-table th,
+  .alp-table td {
+    padding: 6px 8px;
+  }
+
+  .alp-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
