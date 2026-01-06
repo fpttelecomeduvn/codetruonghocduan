@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useActivityLogs } from '../hooks/useActivityLogs';
+import { useSimpleActivityLogs } from '../hooks/useSimpleActivityLogs';
 import { simpleLogActivityService } from '../services/logService_simple';
 import '../styles/AuditLogsPage.css';
 
@@ -9,7 +9,7 @@ interface AuditLogsPageProps {
 }
 
 const AuditLogsPage: React.FC<AuditLogsPageProps> = ({ currentUser, onAccessDenied }) => {
-  const { logs, loading, error, totalCount, currentPage, pageSize, setCurrentPage, filters, handleFilterChange, handleClearFilters, refetch } = useActivityLogs();
+  const { logs, loading, error, totalCount, currentPage, pageSize, setCurrentPage, filters, handleFilterChange, handleClearFilters, refetch } = useSimpleActivityLogs();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'failed'>('all');
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
@@ -39,7 +39,7 @@ const AuditLogsPage: React.FC<AuditLogsPageProps> = ({ currentUser, onAccessDeni
   const filteredLogs = logs.filter(log => {
     const matchesSearch = log.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.resource_name?.toLowerCase().includes(searchTerm.toLowerCase());
+      (log.resource_name?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
     const matchesStatus = statusFilter === 'all' || log.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
