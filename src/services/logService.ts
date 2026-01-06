@@ -57,6 +57,62 @@ const getClientIp = (): Promise<string> => {
     .catch(() => 'unknown');
 };
 
+/**
+ * Lấy location từ IP address sử dụng ip-api.com
+ */
+const getLocationFromIp = async (ip: string): Promise<string> => {
+  try {
+    if (ip === 'unknown') return 'Unknown';
+    const response = await fetch(`https://ip-api.com/json/${ip}?fields=country,city,regionName`);
+    if (!response.ok) return 'Unknown';
+    const data = await response.json();
+    if (data.country && data.city) {
+      return `${data.city}, ${data.regionName || ''}, ${data.country}`.replace(/,\s*$/, '');
+    }
+    return data.country || 'Unknown';
+  } catch (error) {
+    console.warn('Error getting location:', error);
+    return 'Unknown';
+  }
+};
+
+/**
+ * Lấy vị trí hiện tại từ browser Geolocation API
+ */
+const getBrowserLocation = (): Promise<string> => {
+  return new Promise((resolve) => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          try {
+            // Reverse geocoding từ tọa độ
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+            );
+            const data = await response.json();
+            const address = data.address;
+            const location = [
+              address?.city || address?.town || address?.village,
+              address?.state,
+              address?.country
+            ].filter(Boolean).join(', ');
+            resolve(location || 'Unknown');
+          } catch (error) {
+            resolve('Unknown');
+          }
+        },
+        () => {
+          resolve('Unknown'); // Nếu user từ chối permissions
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      resolve('Unknown');
+    }
+  });
+};
+
 const getDeviceName = (): string => {
   const ua = navigator.userAgent;
   if (ua.indexOf('Windows') > -1) return 'Windows';
@@ -64,6 +120,19 @@ const getDeviceName = (): string => {
   if (ua.indexOf('Linux') > -1) return 'Linux';
   if (ua.indexOf('Android') > -1) return 'Android';
   if (ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) return 'iOS';
+  return 'Unknown';
+};
+
+/**
+ * Lấy browser name
+ */
+const getBrowserName = (): string => {
+  const ua = navigator.userAgent;
+  if (ua.indexOf('Firefox') > -1) return 'Firefox';
+  if (ua.indexOf('Chrome') > -1) return 'Chrome';
+  if (ua.indexOf('Safari') > -1 && ua.indexOf('Chrome') === -1) return 'Safari';
+  if (ua.indexOf('Edge') > -1) return 'Edge';
+  if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) return 'Opera';
   return 'Unknown';
 };
 
@@ -91,6 +160,7 @@ export const logActivityService = {
     try {
       const startTime = performance.now();
       const ipAddress = await getClientIp();
+      const location = await getLocationFromIp(ipAddress);
       const endTime = performance.now();
 
       const { error, data: logData } = await supabase
@@ -106,11 +176,16 @@ export const logActivityService = {
             resource_name: data.resourceName,
             description: data.description,
             ip_address: ipAddress,
+            location: location,
             user_agent: navigator.userAgent,
             status: data.status || 'success',
             error_message: data.errorMessage,
             duration_ms: Math.round(endTime - startTime),
-            metadata: data.metadata || {},
+            metadata: {
+              ...data.metadata,
+              device: getDeviceName(),
+              browser: getBrowserName(),
+            },
             timestamp: new Date().toISOString(),
           },
         ]);

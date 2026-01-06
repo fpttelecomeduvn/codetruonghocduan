@@ -109,6 +109,46 @@ CREATE TABLE IF NOT EXISTS promotion_results (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
+-- Create activity_logs table
+CREATE TABLE IF NOT EXISTS activity_logs (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  username VARCHAR(255) NOT NULL,
+  user_role VARCHAR(50),
+  action_type VARCHAR(50) NOT NULL,
+  resource_type VARCHAR(50),
+  resource_id VARCHAR(255),
+  resource_name VARCHAR(255),
+  description TEXT NOT NULL,
+  status VARCHAR(20) DEFAULT 'success',
+  error_message TEXT,
+  ip_address VARCHAR(45),
+  location VARCHAR(255),
+  user_agent TEXT,
+  duration_ms INTEGER,
+  metadata JSONB,
+  timestamp TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- Create login_logs table
+CREATE TABLE IF NOT EXISTS login_logs (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  username VARCHAR(255) NOT NULL,
+  email VARCHAR(255),
+  user_role VARCHAR(50),
+  login_time TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  logout_time TIMESTAMP WITH TIME ZONE,
+  ip_address VARCHAR(45),
+  user_agent TEXT,
+  device_name VARCHAR(100),
+  location VARCHAR(255),
+  status VARCHAR(20) DEFAULT 'active',
+  session_duration_seconds INTEGER,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_students_email ON students(email);
 CREATE INDEX IF NOT EXISTS idx_students_status ON students(status);
@@ -119,3 +159,9 @@ CREATE INDEX IF NOT EXISTS idx_teacher_evaluations_student ON teacher_evaluation
 CREATE INDEX IF NOT EXISTS idx_graduation_evaluations_student ON graduation_evaluations(student_id);
 CREATE INDEX IF NOT EXISTS idx_promotion_results_student ON promotion_results(student_id);
 CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_user ON activity_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_timestamp ON activity_logs(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_action ON activity_logs(action_type);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_resource ON activity_logs(resource_type, resource_id);
+CREATE INDEX IF NOT EXISTS idx_login_logs_user ON login_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_login_logs_timestamp ON login_logs(login_time DESC);

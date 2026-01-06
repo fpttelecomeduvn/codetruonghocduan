@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Student } from '../hooks/useStudents';
+import { logCrudAction, logCreate, logUpdate, logDelete } from '../services/logActionService';
 import '../styles/StudentDialog.css';
 
 interface StudentDialogProps {
@@ -8,6 +9,11 @@ interface StudentDialogProps {
   student?: Student | null;
   onClose: () => void;
   onSave?: (student: Omit<Student, 'id'>) => void;
+  currentUser?: {
+    id: string;
+    username: string;
+    role: string;
+  };
 }
 
 export const StudentDialog = ({
@@ -16,6 +22,7 @@ export const StudentDialog = ({
   student,
   onClose,
   onSave,
+  currentUser,
 }: StudentDialogProps) => {
   const [formData, setFormData] = useState<Omit<Student, 'id'>>({
     name: '',
@@ -27,6 +34,7 @@ export const StudentDialog = ({
     enrollmentDate: '',
     status: 'active',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (student) {
@@ -56,11 +64,61 @@ export const StudentDialog = ({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (onSave) {
-      onSave(formData);
+    if (!onSave || !currentUser) return;
+
+    setIsSubmitting(true);
+    try {
+      if (mode === 'create') {
+        // Log CREATE action
+        await logCrudAction(
+          logCreate(
+            currentUser.id,
+            currentUser.username,
+            currentUser.role,
+            'student',
+            formData.name,
+            { gpa: formData.gpa, major: formData.major, status: formData.status }
+          ),
+          async () => {
+            onSave(formData);
+            return { success: true };
+          }
+        );
+      } else if (mode === 'edit' && student) {
+        // Calculate changes for logging
+        const changes: Record<string, string> = {};
+        Object.entries(formData).forEach(([key, value]) => {
+          const oldValue = student[key as keyof Student];
+          if (oldValue !== value) {
+            changes[key] = `${oldValue} → ${value}`;
+          }
+        });
+
+        // Log UPDATE action
+        await logCrudAction(
+          logUpdate(
+            currentUser.id,
+            currentUser.username,
+            currentUser.role,
+            'student',
+            student.id,
+            student.name,
+            changes
+          ),
+          async () => {
+            onSave(formData);
+            return { success: true };
+          }
+        );
+      }
       onClose();
+    } catch (error) {
+      console.error('Error saving student:', error);
+      alert('Lỗi khi lưu: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -211,12 +269,13 @@ export const StudentDialog = ({
               type="button"
               className="btn btn-secondary"
               onClick={onClose}
+              disabled={isSubmitting}
             >
               {isViewMode ? 'Đóng' : 'Hủy'}
             </button>
             {!isViewMode && (
-              <button type="submit" className="btn btn-primary">
-                {mode === 'create' ? 'Thêm mới' : 'Cập nhật'}
+              <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                {isSubmitting ? '⏳ Đang lưu...' : mode === 'create' ? 'Thêm mới' : 'Cập nhật'}
               </button>
             )}
           </div>
