@@ -276,6 +276,74 @@ export const logActivityService = {
   },
 
   /**
+   * Xóa activity logs theo date range
+   */
+  async deleteActivityLogs(filters?: {
+    startDate?: string;
+    endDate?: string;
+    actionType?: string;
+    status?: string;
+  }): Promise<{ count: number; error: any }> {
+    try {
+      let query = supabase.from('activity_logs').delete();
+
+      if (filters?.startDate) {
+        query = query.gte('timestamp', filters.startDate);
+      }
+
+      if (filters?.endDate) {
+        query = query.lte('timestamp', filters.endDate);
+      }
+
+      if (filters?.actionType) {
+        query = query.eq('action_type', filters.actionType);
+      }
+
+      if (filters?.status) {
+        query = query.eq('status', filters.status);
+      }
+
+      const { count, error } = await query;
+
+      if (error) {
+        console.error('Error deleting activity logs:', error);
+        return { count: 0, error };
+      }
+
+      return { count: count || 0, error };
+    } catch (error) {
+      console.error('Error deleting activity logs:', error);
+      return { count: 0, error };
+    }
+  },
+
+  /**
+   * Xóa activity logs theo tháng
+   */
+  async deleteActivityLogsByMonth(year: number, month: number): Promise<{ count: number; error: any }> {
+    try {
+      const startDate = new Date(year, month - 1, 1).toISOString();
+      const endDate = new Date(year, month, 0, 23, 59, 59).toISOString();
+
+      const { count, error } = await supabase
+        .from('activity_logs')
+        .delete()
+        .gte('timestamp', startDate)
+        .lte('timestamp', endDate);
+
+      if (error) {
+        console.error('Error deleting activity logs by month:', error);
+        return { count: 0, error };
+      }
+
+      return { count: count || 0, error };
+    } catch (error) {
+      console.error('Error deleting activity logs by month:', error);
+      return { count: 0, error };
+    }
+  },
+
+  /**
    * Lấy thống kê logs
    */
   async getLogStats(): Promise<{ data: LogStats | null; error: any }> {
